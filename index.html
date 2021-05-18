@@ -1,0 +1,94 @@
+<html>
+<head>
+  <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@1.2"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/body-pix@2.0"></script>
+</head>
+<body style="margin: 0px;">
+  <video id="myVideoPlayer" controls muted autoplay style="display:none;"></video>
+  <div>
+    <canvas id="canvasOrigin"></canvas>
+    <canvas id="canvasDest"></canvas>
+  </div>
+</body>
+<script>
+  var canvasOrigin = document.querySelector("#canvasOrigin");
+  var contextOrigin = canvasOrigin.getContext("2d");
+
+  var canvasDest = document.querySelector("#canvasDest");
+  var contextDest = canvasDest.getContext("2d");
+
+  const video = document.querySelector('#myVideoPlayer');
+
+  var w, h; //w-width,h-height
+  canvasOrigin.style.display = "none";
+  canvasDest.style.display = "block";
+
+  function loadWebcam() {
+    window.navigator.mediaDevices.getUserMedia({ video: true, audio: true })
+      .then(stream => {
+        video.srcObject = stream;
+        video.onloadedmetadata = (e) => {
+          video.play();
+
+          w = video.videoWidth;
+          h = video.videoHeight
+
+          canvasOrigin.width = w;
+          canvasOrigin.height = h;
+
+          canvasDest.width = w;
+          canvasDest.height = h;
+
+          console.log(`w x h = ${w} x ${h} px.`);
+        };
+      })
+      .catch(error => {
+        alert('You have to enable the mic and the camera: ' + JSON.stringify(error));
+      });
+  }
+
+  function snapshotFromVideoToCanvasOrigin() {
+    contextOrigin.fillRect(0, 0, w, h);
+    contextOrigin.drawImage(video, 0, 0, w, h);
+  }
+
+  async function loadBodyPix() {
+    const net = await bodyPix.load();
+    return net;
+  }
+
+  async function predictBodyPix(net) {
+    const backgroundBlurAmount = 15;
+    const edgeBlurAmount = 3;
+    const flipHorizontal = true;
+
+    const segmentation = await net.segmentPerson(canvasOrigin, {
+      flipHorizontal: false,
+      internalResolution: 'medium',
+      segmentationThreshold: 0.7
+    });
+
+    bodyPix.drawBokehEffect(
+      canvasDest, canvasOrigin, segmentation, backgroundBlurAmount,
+      edgeBlurAmount, flipHorizontal);
+  }
+
+  async function mainLoop(net) {
+    snapshotFromVideoToCanvasOrigin();
+    await predictBodyPix(net);
+
+    setTimeout(function () {
+      mainLoop(net);
+    }, 5)
+  }
+
+  async function main() {
+    loadWebcam();
+    let net = await loadBodyPix();
+    mainLoop(net);
+  }
+
+  main();
+</script>
+
+</html>
