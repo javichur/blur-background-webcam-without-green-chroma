@@ -4,6 +4,13 @@ Free solution to put background blur on your webcam without using chroma. Design
 
 Intelligent and real-time detection of the person on the webcam. No need to set the blur zone manually.
 
+
+Before | After (blur)
+--- | ---
+![before 1](images-tutorial/people-01.jpg "before 1") | ![after 1](images-tutorial/people-01-blur.jpg "after 1")
+![before 3](images-tutorial/people-03.jpg "before 3") | ![after 1](images-tutorial/people-03-blur.jpg "after 3")
+
+
 ## Compatible with:
 - All versions of **OBS Studio**.
 - Modern web browsers.
@@ -21,13 +28,13 @@ The blurred background result is **similar to other video conferencing apps** li
 
 ## Steps to use in OBS Studio (Windows, Linux, Mac OS):
 
-1. Access to X URL and check the blurred background result in real time, with your webcam. You don't need to install anything.
+1. Access to <https://javiercampos.es/projects/blur-background-webcam/> URL and check the blurred background result in real time, with your webcam. You don't need to install anything.
 2. Open OBS Studio from a Terminal, with the following 2 commands (path sample for Windows users, please check your OBS instalation path):
         cd C:\'Program Files'\obs-studio\bin\64bit\
         .\obs64.exe --use-fake-ui-for-media-stream
 
         If you don't have OBS installed yet, you can download it for free here: <https://obsproject.com/>
-3. In the OBS scene, add a "Browser" item and indicate the previous URL (X).
+3. In the OBS scene, add a "Browser" item and indicate the previous URL (<https://javiercampos.es/projects/blur-background-webcam/>).
 4. That's all! Your webcam will appear in your OBS scene with a blurred background in realtime.
 
 Now you can share your OBS scene as a virtual webcam and use it in other video conferencing applications that didn't have the background blur functionality. You can also stream directly with OBS enjoying blurred background on your webcam.
