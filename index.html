@@ -19,9 +19,28 @@
 
   const video = document.querySelector('#myVideoPlayer');
 
-  var w, h; //w-width,h-height
+  var w, h; // w-width, h-height
   canvasOrigin.style.display = "none";
   canvasDest.style.display = "block";
+
+  const urlParams = new URLSearchParams(window.location.search);
+  
+  // blur level parameter
+  const maxBlurLegacy = 15;
+  let blurLevel = parseInt(urlParams.get('blur'));
+  if (isNaN(blurLevel) || blurLevel < 0 || blurLevel > 100) {
+    blurLevel = 100;
+  }
+  blurLevel = Math.floor(blurLevel / 100 * maxBlurLegacy);
+
+  // Mirror parameter
+  let flipHorizontal = urlParams.has('mirror') ? urlParams.get('mirror') === '1' : true;
+
+  // Edge blur amount parameter
+  let edgeBlurAmount = parseInt(urlParams.get('edge'));
+  if (isNaN(edgeBlurAmount) || edgeBlurAmount < 0 || edgeBlurAmount > 5) {
+    edgeBlurAmount = 3;
+  }
 
   function loadWebcam() {
     window.navigator.mediaDevices.getUserMedia({ video: true, audio: true })
@@ -31,7 +50,7 @@
           video.play();
 
           w = video.videoWidth;
-          h = video.videoHeight
+          h = video.videoHeight;
 
           canvasOrigin.width = w;
           canvasOrigin.height = h;
@@ -58,9 +77,7 @@
   }
 
   async function predictBodyPix(net) {
-    const backgroundBlurAmount = 15;
-    const edgeBlurAmount = 3;
-    const flipHorizontal = true;
+    const backgroundBlurAmount = blurLevel; // blur level from URL
 
     const segmentation = await net.segmentPerson(canvasOrigin, {
       flipHorizontal: false,
@@ -79,7 +96,7 @@
 
     setTimeout(function () {
       mainLoop(net);
-    }, 5)
+    }, 5);
   }
 
   async function main() {
