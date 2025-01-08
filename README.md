@@ -38,3 +38,61 @@ The blurred background result is **similar to other video conferencing apps** li
 4. That's all! Your webcam will appear in your OBS scene with a blurred background in realtime.
 
 Now you can share your OBS scene as a virtual webcam and use it in other video conferencing applications that didn't have the background blur functionality. You can also stream directly with OBS enjoying blurred background on your webcam.
+
+## URL Parameters
+
+You can customize the behavior of the background blur effect by using URL parameters. These parameters allow you to adjust the blur intensity, enable or disable mirroring, and configure the edge blur amount. If no parameters are provided, default values will be used.
+
+### Parameters
+
+1. **`blur`**:
+   - **Description**: Adjusts the intensity of the background blur.
+   - **Range**: `0` (no blur) to `100` (maximum blur).
+   - **Default**: `100`.
+   - **Example**: 
+     - `?blur=50` (medium blur).
+     - `?blur=0` (no blur).
+
+2. **`mirror`**:
+   - **Description**: Enables or disables horizontal mirroring of the video.
+   - **Values**: 
+     - `1` (enable mirroring).
+     - `0` (disable mirroring).
+   - **Default**: `1` (mirroring enabled).
+   - **Example**: 
+     - `?mirror=0` (disable mirroring).
+     - `?mirror=1` (enable mirroring).
+
+3. **`edge`**:
+   - **Description**: Sets the blur intensity for edges between the person and the background.
+   - **Range**: `0` (no edge blur) to `5` (maximum edge blur).
+   - **Default**: `3`.
+   - **Example**: 
+     - `?edge=1` (low edge blur).
+     - `?edge=5` (maximum edge blur).
+
+### Combining Parameters
+
+You can combine parameters in the URL to customize multiple settings at once. Separate each parameter with an `&`.
+
+**Example**:  
+`https://javiercampos.es/projects/blur-background-webcam/?blur=75&mirror=0&edge=4`
+
+- `blur=75`: Medium-high background blur.
+- `mirror=0`: Disable mirroring.
+- `edge=4`: High edge blur.
+
+### Default Behavior
+
+If no parameters are provided, the application will use the following defaults:
+
+- `blur=100` (maximum blur).
+- `mirror=1` (mirroring enabled).
+- `edge=3` (default edge blur).
+
+### Notes
+
+- Parameters outside their valid range will be ignored, and their default values will be used instead.
+- The application ensures input validation to avoid unexpected behavior.
+
+Try adjusting these parameters to find the best configuration for your needs!
